@@ -1,4 +1,6 @@
 import { Controller, Get, Post, Put, Delete, Param, Body, } from "@nestjs/common";
+import { ApiBody } from "@nestjs/swagger";
+import { CreateDto } from "./dto/dto";
 import { Todo } from "./entities/todo.entity";
 import { TodoService } from "./todo.service";
 
@@ -24,6 +26,17 @@ export class TodoController {
     const newTodo = await this.todoService.create(todo) 
     return newTodo
   }
+  // @Post()
+  // @ApiBody({type:[CreateDto]})
+  // createAction(@Body() CreateDto: CreateDto):Promise<Todo>{
+  //   const todo = new Todo();
+  //   todo.title = createDto.title;
+  //   if(CreateDto.isCompleted!==undefined){
+  //     todo.isCompleted = createDto.isCompleted;
+  //   }
+  //   return this.todoService.create(todo)
+  // }
+
 
   @Put(':id')
   async updateOne(
