@@ -17,33 +17,33 @@ export class TodoService {
   }
 
   async find(id: number) {
-    const unique = await this.todoRepository.findOne({ where: { id } })
-    if(!unique) {
+    const findTodoById = await this.todoRepository.findOne({ where: { id } })
+    if(!findTodoById) {
       throw new NotFoundException(`Todo with id ${id} is not exists`)
     }
-    return unique
+    return findTodoById
   }
 
   async findAll(params: Partial<Todo>) {
-    const todos = await this.  todoRepository.find({ where: params }) 
-    return todos 
+    const finsAllTodos = await this.  todoRepository.find({ where: params }) 
+    return finsAllTodos 
   }
 
   async update(id: string, updatedTodo: UpdateDto) {
-    const unique = await this.todoRepository.findOne({ where: { id: +id } })
-    if(!unique) {
+    const updateTodo = await this.todoRepository.findOne({ where: { id: +id } })
+    if(!updateTodo) {
       throw new NotFoundException(`Todo with id ${id} is not exists`)
     }
-    const todo = Object.assign(unique, updatedTodo)
+    const todo = Object.assign(updateTodo, updatedTodo)
     await this.todoRepository.save(todo)
     return todo
   }
 
   async delete(id: string): Promise<void> {
-    const unique = await this.todoRepository.findOne({ where: { id: +id } })
-    if(!unique) {
+    const deleteOneTodo = await this.todoRepository.findOne({ where: { id: +id } })
+    if(!deleteOneTodo) {
       throw new NotFoundException(`Todo with id ${id} is not exists`)
     }
-    await this.todoRepository.remove(unique)
+    await this.todoRepository.remove(deleteOneTodo)
   }
 }
