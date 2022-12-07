@@ -1,6 +1,6 @@
-import { Controller, Get, Post, Put, Delete, Param, Body, } from "@nestjs/common";
+import { Controller, Get, Post, Put, Delete, Param, Body, NotFoundException, } from "@nestjs/common";
 import { ApiBody } from "@nestjs/swagger";
-import { CreateDto } from "./dto/dto";
+import { CreateDto, UpdateDto } from "./dto/dto";
 import { Todo } from "./entities/todo.entity";
 import { TodoService } from "./todo.service";
 
@@ -16,36 +16,34 @@ export class TodoController {
   }
   
   @Get(':id')
-  async getById(@Param('id') id: number) {
-    const unique = await this.todoService.find(id)
-    return unique
+  async getById(
+    @Param('id') id: number) {
+    const getOneTodoById = await this.todoService.findOne(id)
+    if(!getOneTodoById){
+      throw new NotFoundException(`Todo with id ${id} was not found!`)
+    }
+    return getOneTodoById
   }
 
   @Post()
-  async createOne(@Body() todo: Todo) {
+  async createOne(
+    @Body() todo: Todo) {
     const newTodo = await this.todoService.create(todo) 
     return newTodo
   }
-  // @Post()
-  // @ApiBody({type:[CreateDto]})
-  // createAction(@Body() CreateDto: CreateDto):Promise<Todo>{
-  //   const todo = new Todo();
-  //   todo.title = createDto.title;
-  //   if(CreateDto.isCompleted!==undefined){
-  //     todo.isCompleted = createDto.isCompleted;
-  //   }
-  //   return this.todoService.create(todo)
-  // }
 
 
   @Put(':id')
-  async updateOne(
+  async updateOneTodo(
     @Param('id') id: string, 
     @Body() updatedTodo: Todo) {
     const todo = await this.todoService.update(id, updatedTodo)
-    console.log(todo)
+    if(!todo){
+      throw new NotFoundException(`Todo with id ${id} was not found!`)
+    }
     return todo
   }
+
 
   @Delete(':id') 
   async deleteOne(@Param('id') id: string) {
