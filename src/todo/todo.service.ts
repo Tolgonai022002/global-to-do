@@ -11,9 +11,9 @@ export class TodoService {
     private readonly todoRepository: Repository<Todo>
   ) {}
 
-  async create(todo: CreateDto) {
-    todo.isCompleted = false
-    return await this.todoRepository.save(todo)
+  async create(createDto: CreateDto) {
+    createDto.isCompleted = false
+    return await this.todoRepository.save(createDto)
   }
 
   async findOne(id: number) {
